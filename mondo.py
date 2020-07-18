@@ -103,3 +103,21 @@ class Mondo:
                 j += 1
             i += 1
         return set(matches)
+
+    def least_specific_matches(self, condition_name, xrefs):
+        matches = list(self.matches(condition_name, xrefs))
+        i = 0
+        while i < len(matches):
+            j = i + 1
+            while j < len(matches):
+                if self.is_descendent_of(matches[j], matches[i]):
+                    del matches[j]
+                    i = -1
+                    break
+                if self.is_descendent_of(matches[i], matches[j]):
+                    del matches[i]
+                    i = -1
+                    break
+                j += 1
+            i += 1
+        return set(matches)
