@@ -116,8 +116,31 @@ class MondoTestCases(unittest.TestCase):
             xrefs
         )
         self.assertEqual(mons, set(['MONDO:0005395']))
+
+    def test_replace_descendent_mondo_xrefs_blank_name_one_descendent(self):
+        #test 1, 1 descendent
+        mons = mon.replace_descendent_mondo_xrefs(
+            ['MONDO:0007038','MONDO:0007139', 'MONDO:0001976', 'MONDO:0001595']
+        )        
+        self.assertEqual(mons, ['MONDO:0007038','MONDO:0007139', 'MONDO:0001595', 'MONDO:0001595'])
+
+    def test_replace_descendent_mondo_xrefs_blank_name_all_direct_descendents(self):
+        #test 2, all direct descendents
+        #Ancestor: MONDO:0001595
+        mons = mon.replace_descendent_mondo_xrefs(
+            ['MONDO:0001976', 'MONDO:0001595', 'MONDO:0007325', 'MONDO:0008979']
+        )        
+        self.assertEqual(mons, ['MONDO:0001595','MONDO:0001595','MONDO:0001595','MONDO:0001595'])
+
+    def test_replace_descendent_mondo_xrefs_blank_name_all_descendents(self):
+        #test 3, all descendents (1 - 2 levels down)
+        #Ancestor: MONDO:0003847
+        mons = mon.replace_descendent_mondo_xrefs(
+            ['MONDO:0005395','MONDO:0001976', 'MONDO:0001595', 'MONDO:0007325', 'MONDO:0008979']
+        )
+        self.assertEqual(mons, ['MONDO:0005395', 'MONDO:0005395','MONDO:0005395','MONDO:0005395','MONDO:0005395'])
     
-# NON-BLANK CONDITION NAMES
+    # NON-BLANK CONDITION NAMES
     def test_most_specific_matches_single_ancestor(self):
         #test 1, 1 ancestor
         xrefs = list(map(
